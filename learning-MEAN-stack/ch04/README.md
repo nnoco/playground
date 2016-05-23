@@ -15,3 +15,30 @@ Node.js는 블로킹 I/O로 인한 지연을 피하고자 이벤트 콜백을 �
 - 이벤트 이미터<super>emitter</super>를 작성해 고유한 리스너를 추가
 - process.nextTick 옵션을 사용해 다음 이벤트 루프 사이클에 선택될 작업을 스케줄링
 - 타이머를 사용해 특정 시간 이후나 주기적인 간격으로 작업을 스케줄링
+  
+  
+### 이벤트 다루기
+자바 스크립트 객체에 커스텀 이벤트 추가
+```
+var events = require("events");
+var emitter = new events.EventEmitter();
+emitter.emit("simpleEvent");
+```
+  
+자바스크립트 객체에 직접 이벤트 추가
+```
+function MyObject() {
+	events.EventEmitter.call(this);
+}
+MyObject.prototype.__proto__ = events.EventEmitter.prototype;
+```
+  
+이벤트 리스너를 객체에 추가
+- addListener(eventName, callback)
+- .on(eventName, callback) : addListener()와 동일
+- .once(eventName, callback); : 이벤트가 트리거되면 한번 콜백함수 실행
+  
+객체에서 리스너를 제거
+- listeners(eventName) : eventName 이벤트에 추가된 리스너 함수 배열을 반환한다.
+- .setMaxListeners(n) : EventEmitter에 n 보다 많은 리스너가 추가된 경우 경고를 터리거한다. 기본 값 10
+- .removeListener(eventName, callback) : EventEmitter의 eventName 이벤트에 등록된 콜 함수를 제거

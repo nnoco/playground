@@ -14,3 +14,5 @@ hs_err_pid*
 # Eclipse
 .classpath
 .project
+
+^java-playground/

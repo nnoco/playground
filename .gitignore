@@ -15,5 +15,5 @@ hs_err_pid*
 .classpath
 .project
 
-/**/*
-!java-playground/
+# node
+learning-MEAN-stack/*

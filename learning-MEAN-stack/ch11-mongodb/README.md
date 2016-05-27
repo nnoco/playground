@@ -1,0 +1,19 @@
+### MongoDB 데이터 형식
+- Double: 1
+- String: 2
+- Object: 3
+- Array: 4
+- Binary: 5
+- Object ID: 7
+- Boolean: 8
+- Date: 9
+- Null: 10
+- Regex: 11
+- Javascript: 12
+- Symbol: 14
+- Javascript(with scope): 15
+- 32bit int: 16
+- Timestamp: 17
+- 64bit int: 18
+- Min Key: 255
+- Max Key: 127

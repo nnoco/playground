@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OSS 강의 이미지 Generator</title>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/html2canvas/build/html2canvas.min.js"></script>
+    <script src="bower_components/canvas2image/canvas2image/canvas2image.js"></script>
+    <script src="bower_components/base64/base64.min.js"></script>
+    <style>
+
+        #toImageArea {
+            background-color: white;
+        }
+        .curriculum-p {
+            text-align: center;
+        }
+        .curriculum {
+            border-radius: 10px;
+            background-color: #AA7722;
+            padding: 7px;
+        }
+    </style>
+</head>
+<body>
+    <table width="100%" border="1">
+        <tr>
+            <td width="600px" id="toImageArea">
+                <p class="curriculum-p">
+                    <span class="curriculum" id="displayCurriculum"></span>
+                </p>
+                <p id="displayTitle"></p>
+                <hr/>
+                <p id="displayDescription"></p>
+                <p id="displayPromoter"></p>
+                <p id="displayTime"></p>
+                <p id="displayPlace"></p>
+                <p id="displaySubject"></p>
+
+            <td>
+                <p>
+                    <a target="_blank" href="#" id="imageAnchor" download="OSS 개발자 포럼 교육.png">이미지로 저장</a>
+                </p>
+                <p><label for="curriculum"><input id="curriculum" class="input"></label></p>
+                <p><label for="title"><input id="title" class="input"></label></p>
+                <p><label for="description"><textarea id="description" class="input"></textarea></label></p>
+                <p><label for="promoter"><input id="promoter" class="input"></label></p>
+                <p><label for="time"><input id="time" class="input"></label></p>
+                <p><label for="place"><input id="place" class="input"></label></p>
+                <p><label for="subject"><input id="subject" class="input"></label></p>
+            </td>
+        </tr>
+    </table>
+
+    <script>
+        String.prototype.capitalizeFirstLetter = function() {
+            return this.charAt(0).toUpperCase() + this.slice(1);
+        }
+
+        var lg = localStorage;
+        $(document).ready(function() {
+            $('.input').on('keyup', function() {
+                apply(this);
+            }).change(function() {
+                apply(this);
+            });
+
+            $("#imageAnchor").attr('disabled', 'disabled');
+            $("#imageAnchor").on('mouseover', function() {
+                $("#imageAnchor").attr('disabled', 'disabled');
+                html2canvas($("#toImageArea"), {
+                    onrendered: function(canvas) {
+                        image = $(Canvas2Image.convertToPNG(canvas)).attr('src');
+
+                        $('#imageAnchor').attr('href', image);
+
+                        $("#imageAnchor").removeAttr('disabled');
+                    }
+                });
+            }).click(function(e) {
+                if($(this).attr('disabled') === 'disabled') {
+                    e.preventDefault();
+                }
+            });
+
+            loadContext();
+
+        });
+
+        function loadContext() {
+            for(let key in lg) {
+                var value = lg[key];
+                $('#' + key).val(value);
+                setText(key, value);
+                console.log("Load - localStorage[%s] : %s", key, lg[key]);
+            }
+        }
+
+        function apply(input) {
+            var id = $(input).attr('id');
+            var value = $(input).val();
+
+            setText(id, value);
+            save(id, value);
+
+            console.log("Apply", id, "and save to local storage");
+        }
+
+        function setText(id, value) {
+            id = '#display' + id.capitalizeFirstLetter();
+            value = value.replace('\n', '<br>');
+
+            $(id).html(value);
+        }
+
+        function save(key, value) {
+            lg.setItem(key, value);
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="marked.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  <style>
+    .box {
+      width:600px;
+      height:800px;
+      float: left;
+    }
+    #html {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <textarea class="box" id="markdown"></textarea>
+  <div class="box" id="html"></div>
+
+  <script>
+    $(function() {
+      $('#markdown').on('input', function() {
+        var md = $(this).val();
+        var html = marked(md);
+        $('#html').html(html);
+      });
+    });
+  </script>
+</body>

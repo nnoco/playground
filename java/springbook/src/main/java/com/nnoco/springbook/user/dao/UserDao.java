@@ -1,16 +1,21 @@
 package com.nnoco.springbook.user.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.nnoco.springbook.user.domain.User;
 
-public abstract class UserDao {
+public class UserDao {
+	SimpleConnectionMaker simpleConnectionMaker;
+	
+	public UserDao() {
+		simpleConnectionMaker = new SimpleConnectionMaker();
+	}
+	
 	public void add(User user) throws ClassNotFoundException, SQLException {
-		Connection c = getConnection();
+		Connection c = simpleConnectionMaker.makeNewConnection();
 		
 		PreparedStatement ps = c.prepareStatement(
 				"insert into users(id, name, password) values(?,?,?)");
@@ -26,7 +31,7 @@ public abstract class UserDao {
 	}
 	
 	public User get(String id) throws ClassNotFoundException, SQLException {
-		Connection c = getConnection();
+		Connection c = simpleConnectionMaker.makeNewConnection();
 		
 		PreparedStatement ps = c.prepareStatement(
 				"select * from users where id=?");
@@ -47,5 +52,4 @@ public abstract class UserDao {
 		return user;
 	}
 	
-	public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
 }

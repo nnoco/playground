@@ -6,11 +6,10 @@ import com.nnoco.springbook.user.domain.User;
 
 public class UserDaoTest {
 	public static void main( String[] args ) throws ClassNotFoundException, SQLException {
-		ConnectionMaker connectionMaker = new KConnectionMaker();
-        UserDao dao = new UserDao(connectionMaker);
+        UserDao dao = new DaoFactory().userDao();
         
         User user = new User();
-        user.setId("nnoco56");
+        user.setId("nnoco6");
         user.setName("이준영");
         user.setPassword("hello");
         

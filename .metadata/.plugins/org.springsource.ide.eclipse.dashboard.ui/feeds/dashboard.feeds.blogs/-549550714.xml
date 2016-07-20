@@ -5,7 +5,58 @@
   <link rel="self" href="https://spring.io/blog.atom" />
   <id>http://spring.io/blog.atom</id>
   <icon>https://spring.io/favicon.ico</icon>
-  <updated>2016-07-12T19:23:02Z</updated>
+  <updated>2016-07-19T13:44:39Z</updated>
+  <entry>
+    <title>This Week in Spring - July 19th, 2016</title>
+    <link rel="alternate" href="https://spring.io/blog/2016/07/19/this-week-in-spring-july-19th-2016" />
+    <category term="engineering" label="Engineering" />
+    <author>
+      <name>Josh Long</name>
+    </author>
+    <id>tag:spring.io,2016-07-19:2560</id>
+    <updated>2016-07-19T13:44:39Z</updated>
+    <content type="html">&lt;p&gt;Welcome to another installment of &lt;em&gt;This Week in Spring!&lt;/em&gt; This week I am in Cincinnati and Columbus, Ohio, and Los Angeles and San Francisco, California talking to customers and doing meetups.&lt;/p&gt;
+&lt;p&gt;This is my favorite time of year! As we lead to &lt;strong&gt;&lt;a href="http://springoneplatform.io"&gt;SpringOne Platform&lt;/a&gt;&lt;/strong&gt;, there&amp;rsquo;s so much good stuff being released that one can hardly keep up! I am &lt;em&gt;really&lt;/em&gt; looking forward to this year&amp;rsquo;s &lt;strong&gt;&lt;a href="http://springoneplatform.io"&gt;SpringOne Platform&lt;/a&gt;&lt;/strong&gt; show, coming in early August. It&amp;rsquo;s an amazing time to build applications, and SpringOne Platform is in a unique position to capture the larger discussion: why do we #devops, #cloud, #agile, or #microservice? Join the discussion August 1-4, 2016 in beautiful Las Vegas and let&amp;rsquo;s find out!&lt;/p&gt;
+&lt;p&gt;So, let’s get to it!&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Spring Integration and messaging ninja Artem Bilan &lt;a href="https://spring.io/blog/2016/07/12/spring-for-apache-kafka-1-0-2-available-now"&gt;just announced Spring for Apache Kafka 1.0.2&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;and &lt;a href="https://spring.io/blog/2016/07/18/spring-amqp-1-6-1-available-now"&gt;Spring AMQP 1.6.1&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;I &lt;a href="https://twitter.com/snicoll/status/753639081008041984"&gt;love this tweet&lt;/a&gt; from Spring Boot ninja Stéphane Nicoll ‏explaining that Spring Boot 1.3.7 will release the same day as Spring Boot 1.4.0.RELEASE, July 28th, just in time for SpringOne Platform!&lt;/li&gt;
+  &lt;li&gt;I &lt;a href="http://www.journaldev.com/7969/spring-boot-tutorial"&gt;like this Spring Boot tutorial&lt;/a&gt;, though I disagree with one claim. Spring Boot is about reducing the time to develop applications compared to &lt;em&gt;all&lt;/em&gt; technologies.&lt;/li&gt;
+  &lt;li&gt;Our buddy Eugen Paraschiv has put together &lt;a href="http://www.baeldung.com/spring-boot-starters"&gt;a nice look at Spring Boot&amp;rsquo;s starters&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Eugen also put &lt;a href="http://www.baeldung.com/spring-boot-application-configuration"&gt;together a great look at configuration in Spring Boot&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;want to build Java EE and other &lt;a href="https://jaxenter.com/playing-with-spring-boot-docker-in-netbeans-ide-127672.html"&gt;types of applications quickly with Spring Boot and NetBeans and Docker? I like this cool post on JAXEnter&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Dave Burke put together a nice look &lt;a href="http://nixmash.com/java/rss-feeds-with-spring-boot/"&gt;at consuming RSS feeds with Spring Boot&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Have you seen the &lt;a href="http://www.jetbrains.com/help/idea/2016.2/spring-boot.html"&gt;new Spring Boot features in IntelliJ 16.2&lt;/a&gt;?&lt;/li&gt;
+  &lt;li&gt;Pascal Alma is continuing his look at deploying applications based on Spring Boot to AWS. In the first installment he showed the easy approach, using BoxFuse, and now he is spelling out the most painful approach: &lt;a href="https://pragmaticintegrator.wordpress.com/2016/07/12/run-your-spring-boot-application-on-aws-using-elastic-beanstalk/"&gt;using AWS directly to deploy Spring Boot applications manually&lt;/a&gt;. (*Or*, &lt;a href="http://run.pivotal.io"&gt;you could just use Pivotal Web Services&lt;/a&gt; and run &lt;code&gt;cf push -p my.jar myapp&lt;/code&gt; and be done with it!)&lt;/li&gt;
+  &lt;li&gt;I dig this talk on building &lt;a href="https://www.youtube.com/watch?v=RcofDO079NM"&gt;cloud native and secure applications with Spring Boot&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <title>Spring AMQP 1.6.1 available now</title>
+    <link rel="alternate" href="https://spring.io/blog/2016/07/18/spring-amqp-1-6-1-available-now" />
+    <category term="releases" label="Releases" />
+    <author>
+      <name>Artem Bilan</name>
+    </author>
+    <id>tag:spring.io,2016-07-18:2559</id>
+    <updated>2016-07-18T18:33:33Z</updated>
+    <content type="html">&lt;div class="paragraph"&gt;
+&lt;p&gt;It is my pleasure to announce that the Spring AMQP &lt;a href="https://jira.spring.io/jira/secure/ReleaseNote.jspa?projectId=10450&amp;amp;version=15423"&gt;1.6.1&lt;/a&gt; maintenance release &lt;a href="http://projects.spring.io/spring-amqp/"&gt;is available now&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;As usual, thanks to the community for any feedback and contribution all the ways!&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;This release contains several critical bug fixes, therefore an upgrade is highly recommended.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;We haven&amp;#8217;t switched &lt;code&gt;master&lt;/code&gt; branch to &lt;code&gt;2.0&lt;/code&gt; yet, but that is really our intention in the nearest future to start enjoying a new Spring 5.0 and Java 8 foundation for Spring AMQP project code base!&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;&lt;a href="http://projects.spring.io/spring-amqp/"&gt;Project Page&lt;/a&gt; | &lt;a href="https://github.com/spring-projects/spring-amqp"&gt;GitHub&lt;/a&gt; | &lt;a href="http://stackoverflow.com/questions/tagged/spring-amqp"&gt;Help&lt;/a&gt; | &lt;a href="http://docs.spring.io/spring-amqp/reference/html/"&gt;Documentation&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;</content>
+  </entry>
   <entry>
     <title>Spring for Apache Kafka 1.0.2 available now</title>
     <link rel="alternate" href="https://spring.io/blog/2016/07/12/spring-for-apache-kafka-1-0-2-available-now" />
@@ -730,62 +781,5 @@ So, please, meet &lt;code&gt;spring-kafka:1.0.1.RELEASE&lt;/code&gt; as well.
 &lt;p&gt;&lt;a href="https://spring.io/team/grussell"&gt;Gary Russell&lt;/a&gt; will be talking about &lt;a href="https://2016.event.springoneplatform.io/schedule/sessions/spring_for_apache_kafka.html"&gt;Spring for Apache Kafka&lt;/a&gt; at &lt;a href="http://springoneplatform.io"&gt;Spring One Platform&lt;/a&gt;, which is taking place in Las Vegas between August 1-4 this year.
 There are many other great talks so &lt;a href="https://2016.event.springoneplatform.io/schedule/sessions"&gt;check the agenda&lt;/a&gt; and &lt;a href="https://2016.event.springoneplatform.io/register"&gt;get your ticket&lt;/a&gt; if you haven’t done so already.&lt;/p&gt;
 &lt;/div&gt;</content>
-  </entry>
-  <entry>
-    <title>Spring Cloud Brixton.SR2 is available</title>
-    <link rel="alternate" href="https://spring.io/blog/2016/07/01/spring-cloud-brixton-sr2-is-available" />
-    <category term="releases" label="Releases" />
-    <author>
-      <name>Spencer Gibb</name>
-    </author>
-    <id>tag:spring.io,2016-07-01:2541</id>
-    <updated>2016-07-01T15:19:00Z</updated>
-    <content type="html">&lt;p&gt;On behalf of the team, I am pleased to announce that Service Release 2 of the &lt;a href="http://cloud.spring.io"&gt;Spring Cloud Brixton&lt;/a&gt; Release Train is available today. The release can be found in our &lt;a href="http://repo.spring.io/release"&gt;Spring Release repository&lt;/a&gt; and &lt;a href="http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22spring-cloud-dependencies%22"&gt;Maven Central&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;This is primarily a bug fix release.&lt;/p&gt;&lt;h4&gt;&lt;a href="#the-following-modules-were-updated-as-part-of-brixton-sr2" class="anchor" name="the-following-modules-were-updated-as-part-of-brixton-sr2"&gt;&lt;/a&gt;The following modules were updated as part of Brixton.SR2:&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;Spring Cloud Config &lt;a href="https://github.com/spring-cloud/spring-cloud-config/issues?q=milestone:1.1.2"&gt;1.1.2.RELEASE&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;Spring Cloud Consul &lt;a href="https://github.com/spring-cloud/spring-cloud-consul/issues?q=milestone:1.0.2"&gt;1.0.2.RELEASE&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;Spring Cloud Netflix &lt;a href="https://github.com/spring-cloud/spring-cloud-netflix/issues?q=milestone:1.1.3"&gt;1.1.3.RELEASE&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;Spring Cloud Sleuth &lt;a href="https://github.com/spring-cloud/spring-cloud-sleuth/issues?q=milestone:1.0.2"&gt;1.0.2.RELEASE&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;Spring Cloud Zookeeper &lt;a href="https://github.com/spring-cloud/spring-cloud-zookeeper/issues?q=milestone:1.0.2"&gt;1.0.2.RELEASE&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;And, as always, we welcome feedback: either on &lt;a href="https://github.com/spring-cloud"&gt;GitHub&lt;/a&gt;, on &lt;a href="https://gitter.im/spring-cloud/spring-cloud"&gt;gitter&lt;/a&gt;, on &lt;a href="http://stackoverflow.com/questions/tagged/spring-cloud"&gt;Stack Overflow&lt;/a&gt;, or on &lt;a href="https://twitter.com/SpringCloudOSS"&gt;Twitter&lt;/a&gt;.&lt;/p&gt;
-&lt;hr/&gt;
-&lt;p&gt;The Spring Cloud team will be talking about Spring Cloud at &lt;a href="http://springoneplatform.io"&gt;Spring One Platform&lt;/a&gt;, which will be taking place in Las Vegas between August 1-4 this year. There are many other great talks so &lt;a href="https://2016.event.springoneplatform.io/schedule/sessions"&gt;check the agenda&lt;/a&gt; and &lt;a href="https://2016.event.springoneplatform.io/register"&gt;get your ticket&lt;/a&gt; if you haven’t done so already. &lt;/p&gt;</content>
-  </entry>
-  <entry>
-    <title>Gradle Dependency Management Plugin 0.6.0 released</title>
-    <link rel="alternate" href="https://spring.io/blog/2016/06/30/gradle-dependency-management-plugin-0-6-0-released" />
-    <category term="releases" label="Releases" />
-    <author>
-      <name>Andy Wilkinson</name>
-    </author>
-    <id>tag:spring.io,2016-06-30:2539</id>
-    <updated>2016-06-30T17:15:00Z</updated>
-    <content type="html">&lt;p&gt;I am pleased to announce that &lt;a href="https://github.com/spring-gradle-plugins/dependency-management-plugin"&gt;Gradle dependency management plugin&lt;/a&gt; 0.6.0.RELEASE is now available from Maven Central, JCenter, and the &lt;a href="https://plugins.gradle.org/plugin/io.spring.dependency-management"&gt;Gradle Plugin Portal&lt;/a&gt;. &lt;/p&gt;&lt;h3&gt;&lt;a href="#gradle-3-0-compatibility" class="anchor" name="gradle-3-0-compatibility"&gt;&lt;/a&gt;Gradle 3.0 compatibility&lt;/h3&gt;
-&lt;p&gt;This new release is compatible with Gradle 3.0. At the time of writing it&amp;rsquo;s tested against 3.0 M2 and the 0.6.x line will continue to track Gradle 3.0 development to maintain compatibility if at all possible.&lt;/p&gt;&lt;h3&gt;&lt;a href="#finer-control-over-bom-property-overrides" class="anchor" name="finer-control-over-bom-property-overrides"&gt;&lt;/a&gt;Finer control over bom property overrides&lt;/h3&gt;
-&lt;p&gt;Previously, an imported bom&amp;rsquo;s properties could be overridden using project properties. This new release adds support for overriding a property as part of the import. &lt;code&gt;bomProperty&lt;/code&gt; can be used to override properties one at a time (and can be used multiple times to override multiple properties):&lt;/p&gt;
-&lt;pre&gt;&lt;code class="prettyprint groovy"&gt;dependencyManagement {&#xD;
-    imports {&#xD;
-        mavenBom(&amp;#39;com.example:example-bom:1.2.0&amp;#39;) {&#xD;
-            bomProperty &amp;#39;foo.version&amp;#39;, &amp;#39;1.1.1&amp;#39;&#xD;
-            bomProperty &amp;#39;bar.version&amp;#39;, &amp;#39;2.0.3&amp;#39;&#xD;
-        }&#xD;
-    }&#xD;
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Alternatively, &lt;code&gt;bomProperties&lt;/code&gt; can be used along with a map of property overrides:&lt;/p&gt;
-&lt;pre&gt;&lt;code class="prettyprint groovy"&gt;dependencyManagement {&#xD;
-    imports {&#xD;
-        mavenBom(&amp;#39;com.example:example-bom:1.2.0&amp;#39;) {&#xD;
-            bomProperties([&#xD;
-                &amp;#39;foo.version&amp;#39;: &amp;#39;1.1.1&amp;#39;,&#xD;
-                &amp;#39;bar.version&amp;#39;: &amp;#39;2.0.3&amp;#39;&#xD;
-            ])&#xD;
-        }&#xD;
-    }&#xD;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;h2&gt;&lt;a href="#learning-more" class="anchor" name="learning-more"&gt;&lt;/a&gt;Learning more&lt;/h2&gt;
-&lt;p&gt;For more information about how the plugin can improve your Gradle builds, please read the &lt;a href="https://spring.io/blog/2015/02/23/better-dependency-management-for-gradle"&gt;introductory blog post&lt;/a&gt;.&lt;/p&gt;</content>
   </entry>
 </feed>

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div {
+            padding: 10px;
+        }
+
+        canvas {
+            border: 1px solid black;
+        }
+
+        .btn-mode.active {
+            background-color: #0b57d0;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+
+    <script>
+        const Colors = {
+            normal: {
+                fill: 'white',
+                stroke: 'black',
+                fillFont: 'black',
+            },
+            selected: {
+                fill: '#9aff56',
+                stroke: 'red',
+                fillFont: 'darkblue'
+            },
+
+        }
+
+        const Fonts = {
+            stateName: '24px sanserif',
+        }
+
+        class State {
+            selected = false;
+            _name = '';
+            dragX = 0;
+            dragY = 0;
+
+            constructor(designer, x, y, w, h) {
+                this.designer = designer;
+                this.style = Colors.normal;
+                this.x = x;
+                this.y = y;
+                this.w = w;
+                this.h = h;
+                this.textX = x + 10;
+                this.textY = y + h - 10;
+                this.name = 'New State';
+                this.rect(x, y);
+            }
+
+            get name() {
+                return this._name;
+            }
+
+            set name(value) {
+                const { context } = this.designer;
+                this._name = value;
+                context.font = Fonts.stateName;
+                const measure = context.measureText(this._name);
+                this.textOffsetX = 10;
+                this.textOffsetY = (this.h / 2) + (measure.fontBoundingBoxAscent / 2);
+                this.designer.clearAndDraw();
+                console.log('set text', this._name, measure, this.textOffsetX, this.textOffsetY)
+            }
+
+            rect(x, y) {
+                const path = new Path2D();
+                path.roundRect(x + this.dragX, y + this.dragY, this.w, this.h, 5);
+                this.path = path;
+            }
+
+            drag(x, y) {
+                this.dragX = x;
+                this.dragY = y;
+            }
+
+            dragEnd() {
+                this.x += this.dragX;
+                this.y += this.dragY;
+                this.drag(0, 0);
+            }
+
+            draw() {
+                const {context, viewport} = this.designer;
+                const x = this.x + viewport.currentX;
+                const y = this.y + viewport.currentY;
+                console.log('draw.', this.style, x, y, this.path);
+                context.fillStyle = this.style.fill;
+                this.rect(x, y);
+                context.fill(this.path);
+
+                context.strokeStyle = this.style.stroke;
+                context.stroke(this.path);
+
+                context.font = Fonts.stateName;
+                context.fillStyle = this.style.fillFont;
+                context.fillText(this.name, x + this.textOffsetX + this.dragX, y + this.textOffsetY + this.dragY);
+                console.log('draw', x, y, this.textOffsetX, this.textOffsetY);
+            }
+
+            select() {
+                this.style = Colors.selected;
+                this.selected = true;
+            }
+
+            unselect() {
+                this.style = Colors.normal;
+                this.selected = false;
+            }
+        }
+
+        class Designer {
+            objects = [];
+            mode = 'draw';
+            selected = undefined;
+            stateSelectionChangedEventListeners = [];
+
+            constructor(canvas) {
+                this.canvas = canvas;
+                this.context = canvas.getContext('2d');
+                this.viewport = new Viewport(canvas);
+            }
+
+            clearAndDraw() {
+                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                this.context.fillStyle = '#111111';
+                const { width, height } = this.canvas;
+                for(let row = 0 + (this.viewport.currentY % 20) ; row < height; row += 20) {
+                    for(let col = 0 + (this.viewport.currentX % 20); col < width; col += 20) {
+                        this.context.fillRect(col, row, 1, 1);
+                    }
+                }
+
+                this.objects.forEach(it => it.draw());
+            }
+
+            addHead(object) {
+                this.objects.unshift(object);
+            }
+
+            addTail(object) {
+                this.objects.push(object);
+            }
+
+            add(object) {
+                this.addTail(object);
+                this.clearAndDraw();
+            }
+
+            isDrawMode() {
+                return this.mode === 'draw';
+            }
+
+            isSelectMode() {
+                return this.mode === 'select';
+            }
+
+            drawMode() {
+                this.mode = 'draw';
+                this.selected?.unselect();
+                this.selected = undefined;
+                this.clearAndDraw();
+            }
+
+            selectMode() {
+                this.mode = 'select';
+            }
+
+            findFirstHit(x, y) {
+                return this.objects.find(object => this.context.isPointInPath(object.path, x, y));
+            }
+
+            clearSelect() {
+                this.selected?.unselect();
+                this.selected = undefined;
+            }
+
+            select(x, y) {
+                const current = this.selected;
+                const hit = this.findFirstHit(x, y);
+
+                this.clearSelect();
+                if(current != hit) {
+                    this.selected = hit;
+                    hit?.select();
+                    this.notifyStateSelectionChanged();
+                }
+
+                this.clearAndDraw();
+            }
+
+            notifyStateSelectionChanged() {
+                this.stateSelectionChangedEventListeners.forEach(listener => listener(this.selected));
+            }
+
+            onMouseDown(x, y) {
+                this.mouse = new MouseAction(x, y);
+                this.hit = this.findFirstHit(x, y);
+            }
+
+            onMouseMove(x, y) {
+                this.mouse?.move(x, y);
+
+                if(this.mouse) {
+                    this.mouse.move(x, y);
+
+                    if(!this.hit) {
+                        this.viewport.scroll(this.mouse.distanceX, this.mouse.distanceY);
+                        console.log('view port', this.viewport);
+                    } else {
+                        // 선택한 항목을 드래그 하는 경우
+                        this.hit.drag(this.mouse.distanceX, this.mouse.distanceY);
+                    }
+
+                    this.clearAndDraw();
+                }
+            }
+
+            onMouseUp(x, y) {
+                if(this.mouse) {
+                    this.mouse.mouseup(x, y);
+
+                    if(this.mouse.isClick()) {
+                        if(this.isDrawMode()) {
+                            const object = new State(this, x - this.viewport.currentX, y - this.viewport.currentY, 200, 50);
+                            this.add(object);
+                        } else if(this.isSelectMode()) {
+                            this.select(x, y);
+                        }
+                    } else if(this.hit) {
+                        this.hit.dragEnd()
+                        this.hit = undefined;
+                    } else {
+                        this.viewport.endScroll();
+                    }
+                }
+
+                this.mouse = undefined;
+            }
+
+            onMouseLeave() {
+                this.mouse = undefined;
+            }
+
+            onStateSelectionChanged(listener) {
+                this.stateSelectionChangedEventListeners.push(listener);
+            }
+        }
+
+        class Viewport {
+            x = 0;
+            y = 0;
+            scrollX = 0;
+            scrollY = 0;
+
+            constructor(canvas) {
+                this.w = canvas.width;
+                this.h = canvas.height;
+            }
+
+            scroll(x, y) {
+                this.scrollX = x;
+                this.scrollY = y;
+            }
+
+            endScroll() {
+                this.x += this.scrollX;
+                this.y += this.scrollY;
+                this.resetScroll();
+            }
+
+            resetScroll() {
+                this.scrollX = 0;
+                this.scrollY = 0;
+            }
+
+            get currentX() {
+                return this.x + this.scrollX;
+            }
+
+            get currentY() {
+                return this.y + this.scrollY;
+            }
+        }
+
+        class MouseAction {
+            moved = false;
+            distanceX = 0;
+            distanceY = 0;
+
+            constructor(startX, startY) {
+                this.startX = startX;
+                this.startY = startY;
+                this.x = startX;
+                this.y = startY;
+            }
+
+            move(x, y) {
+                this.x = x;
+                this.y = y;
+                this.moved = true;
+                this.distanceX = x - this.startX;
+                this.distanceY = y - this.startY;
+            }
+
+            mouseup(x, y) {
+                this.endX = x;
+                this.endY = y;
+                this.distanceX = x - this.startX;
+                this.distanceY = y - this.startY;
+            }
+
+            isClick() {
+                return !this.moved;
+            }
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <button id="btnDrawMode" class="btn-mode active">Draw Mode</button>
+        <button id="btnSelectMode" class="btn-mode">Select Mode</button>
+    </div>
+
+    <div>
+        <input id="textSelectedStateName" style="width: 300px">
+        <button id="btnChangeName">이름 변경</button>
+    </div>
+
+    <div>
+        <canvas width="1200" height="600"></canvas>
+    </div>
+    
+    <div>
+        Requirements
+        <ul>
+            <li>최초 1개의 State 존재, 최소 1개의 State는 유지되어야 함</li>
+            <li>누락 방지를 위해 Transition을 빈 곳에서 놓으면 State 생성</li>
+            <li>State 삭제 시 Transition이 있는 경우 함께 삭제</li>
+            <li>2개 이상의 Transition이 있을 때만 삭제 가능</li>
+            <li>Transition이 없는 State만 삭제 가능</li>
+            <li>State와 Transition은 내부의 ID 값을 가지며, state_name, transition_name은 별개의 값</li>
+            <li>Stage Actor와 Action Actor의 구분과 Overide</li>
+        </ul>
+    </div>
+
+    <script>
+        const [canvas, btnDrawMode, btnSelectMode, textSelectedStateName, btnChangeName] = [
+            document.querySelector('canvas'),
+            document.querySelector('#btnDrawMode'),
+            document.querySelector('#btnSelectMode'),
+            document.querySelector('#textSelectedStateName'),
+            document.querySelector('#btnChangeName'),
+        ];
+
+        (function() {
+            console.log('draw');
+            const context = canvas.getContext('2d');
+
+            const designer = new Designer(canvas);
+
+            let selectedState = undefined;
+
+            designer.onStateSelectionChanged(state => {
+                selectedState = state;
+                if(state) {
+                    textSelectedStateName.disabled = false;
+                    textSelectedStateName.value = state.name;
+                    btnChangeName.disabled = false;
+                } else {
+                    textSelectedStateName.value = '';
+                    textSelectedStateName.disabled = true;
+                    btnChangeName.disabled = true;
+                }
+            });
+
+            btnChangeName.onclick = e => {
+                if(selectedState) {
+                    selectedState.name = textSelectedStateName.value;
+                }
+            }
+
+            textSelectedStateName.onkeypress = e => {
+                e.stopPropagation();
+                if(e.key === 'Enter') {
+                    selectedState.name = e.target.value;
+                }
+            };
+
+            function drawMode() {
+                designer.drawMode();
+                btnDrawMode.classList.add('active');
+                btnSelectMode.classList.remove('active');
+            }
+
+            function selectMode() {
+                designer.selectMode();
+                btnSelectMode.classList.add('active');
+                btnDrawMode.classList.remove('active');
+            }
+
+            btnDrawMode.onclick = () => drawMode();
+            btnSelectMode.onclick = () => selectMode();
+
+            canvas.onmousedown = e => {
+                console.log('mouse down', e.offsetX, e.offsetY);
+                designer.onMouseDown(e.offsetX, e.offsetY);
+            };
+
+            canvas.onmousemove = e => {
+                if(e.buttons === 1) {
+                    console.log('mouse move', e.offsetX, e.offsetY, e.button, e.buttons, e);
+                    designer.onMouseMove(e.offsetX, e.offsetY);
+                }
+            }
+
+            canvas.onmouseup = e => {
+                console.log('mouse up', e.offsetX, e.offsetY);
+                designer.onMouseUp(e.offsetX, e.offsetY);
+            }
+
+            canvas.onmouseleave = e => {
+                console.log('mouse leave');
+                designer.onMouseLeave();
+            }
+
+            window.onkeypress = e => {
+                if(e.key === 'd') {
+                    drawMode();
+                }
+
+                if(e.key === 's') {
+                    selectMode();
+                }
+            }
+        })();
+
+    </script>
+</body>
+</html>

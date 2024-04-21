@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./node_modules/axios/dist/axios.js"></script>
+    <script src="./node_modules/jquery/dist/jquery.js"></script>
+    <script src="https://unpkg.com/qss"></script>
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=9d8bd851f6eb9805287ff42acf31a9a5&libraries=services"></script>
+</head>
+<body>
+    <input id="address" style="width: 600px">
+    <button id="btnOpenSearchAddress">주소 찾기</button>
+    <div id="map" style="width:2048px;height:800px;"></div>
+    <script>
+        const dest = ['37.3952969470752', '127.110449292622']; // 판교 아지트
+        const destCoords = new kakao.maps.LatLng(dest[0], dest[1]);
+        const initialCenterCoords = new kakao.maps.LatLng(37.56682, 126.97865);
+
+        const mapContainer = document.getElementById('map');
+        const mapOption = {
+            // 지도의 중심 좌표
+            center: initialCenterCoords,
+            // 지도의 확대 레벨
+            level: 3,
+            // 지도 종류
+            mapTypeId: kakao.maps.MapTypeId.ROADMP
+        }
+
+        // 지도를 생성한다
+        const map = new kakao.maps.Map(mapContainer, mapOption);
+        // map.setDraggable(false);
+
+        const geocoder = new kakao.maps.services.Geocoder();
+
+        function createMarker(coords, title) {
+            const marker = new kakao.maps.Marker({
+                map: map,
+                position: coords,
+                title: title,
+            });
+
+            marker.setMap(map);
+        }
+
+        async function onAddressSelected(data) {
+            console.log('주소', data);
+            let result = await searchAddress(data.address);
+            result = result[0];
+
+            const coords = new kakao.maps.LatLng(result.y, result.x);
+            setMapCenter(coords);
+            createMarker(coords, '찾은 곳');
+            findPath(coords, destCoords);
+
+            const bounds = new kakao.maps.LatLngBounds();
+            bounds.extend(coords);
+            bounds.extend(destCoords);
+            createMarker(destCoords, '회사');
+            map.setBounds(bounds);
+        }
+
+        function searchAddress(address) {
+            return new Promise((resolve, reject) => {
+                geocoder.addressSearch(address, (result, status) => {
+                    if(status !== kakao.maps.services.Status.OK) {
+                        reject('주소 조회 실패');
+                    }
+
+                    console.log(`주소 검색 결과. ${address}`, result);
+                    resolve(result);
+                });
+            });
+        }
+
+        function findPath(departure, destination) {
+            console.log(departure, destination)
+            // 카카오모빌리티 길찾기 API 호출
+            const directionParams = {
+                origin: `${departure.getLng()},${departure.getLat()}`,
+                destination: `${destination.getLng()},${destination.getLat()}`,
+                // waypoints: ,
+                priority: 'RECOMMEND',
+                car_fuel: 'GASOLINE',
+                car_hipass: false,
+                alternatives: false,
+                road_details: false,
+            }
+            const q = Object.keys(directionParams).map(name => `${name}=${directionParams[name]}`).join('&');
+            const url = `https://apis-navi.kakaomobility.com/v1/directions?${q}`;
+
+            console.log(directionParams, q, url);
+            axios.get(url, {
+                headers: {
+                    'Authorization': 'KakaoAK 53b01ce1b92730be541b9dacedb1f09d',
+                }
+            }).then(res => {
+                console.log(res);
+                return res.data
+            }).then(result => {
+                const routes = result.routes[0].sections[0].guides;
+                console.log('routes', routes);
+
+                drawRoutes(routes);
+                return result;
+            });
+        }
+
+        function drawRoutes(routes) {
+            const path = routes.map(route => {
+                return new kakao.maps.LatLng(route.y, route.x)
+            });
+
+            const polyline = new kakao.maps.Polyline({
+                path,
+                strokeWeight: 10,
+                strokeColor: '#FF0000',
+                strokeOpacity: 0.8,
+                strokeStype: 'solid'
+            });
+
+            polyline.setMap(map);
+        }
+
+        function setMapCenter(coords) {
+            // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+            // const center = coords;
+            map.setCenter(coords);
+        }
+
+        $(function() {
+            
+
+            $('#btnOpenSearchAddress').on('click', () => {
+                new daum.Postcode({
+                    oncomplete: function(data) {
+                        $('#address').val(data.address);
+                        onAddressSelected(data);
+                    }
+                }).open({
+                    q: '동판교로 275'
+                });
+            });
+        })
+    </script>
+</body>
+</html>

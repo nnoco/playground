@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/fabric@5.3.0/dist/fabric.min.js"></script>
+    <script src="https://unpkg.com/paper@0.12.17/dist/paper-full.js"></script>
+</head>
+<body>
+    <canvas id="canvas" resize></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+
+        paper.setup(canvas);
+
+        var path = new paper.Path();
+
+        path.strokeColor = 'blank';
+
+        let start = new paper.Point(100, 100);
+
+        path.moveTo(start);
+        path.lineTo(start.add([200, -50]));
+        paper.view.draw();
+    </script>
+</body>
+</html>
